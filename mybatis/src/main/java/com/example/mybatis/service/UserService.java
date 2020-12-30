@@ -1,5 +1,7 @@
 package com.example.mybatis.service;
 
+import java.util.List;
+
 import com.example.mybatis.dto.UserResponseDto;
 import com.example.mybatis.dto.UserSaveRequestDto;
 import com.example.mybatis.mapper.UserMapper;
@@ -18,10 +20,8 @@ public class UserService {
     @Transactional
     public Long insertUser(UserSaveRequestDto userSaveRequestDto) {
         userMapper.insertUser(userSaveRequestDto);
-        
-        UserResponseDto userResponseDto = userMapper.getUser();
 
-        return userResponseDto.getId();
+        return userSaveRequestDto.getUserId();
     }
 
 }

@@ -17,6 +17,7 @@ public class MybatisConfig {
         sessionFactory.setDataSource(dataSource);
         sessionFactory.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:mybatis/mapper/*.xml"));
         sessionFactory.setTypeAliasesPackage("com.example.mybatis.dto");
+        sessionFactory.getObject().getConfiguration().setMapUnderscoreToCamelCase(true);
 
         return sessionFactory.getObject();
     }

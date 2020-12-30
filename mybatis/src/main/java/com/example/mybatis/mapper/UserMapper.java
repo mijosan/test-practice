@@ -10,8 +10,7 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface UserMapper {
     
-    public List<UserResponseDto> getUserList();
-    public UserResponseDto getUser();
+    public List<UserResponseDto> selectUserList();
     public void insertUser(UserSaveRequestDto userSaveRequestDto);
     
 }

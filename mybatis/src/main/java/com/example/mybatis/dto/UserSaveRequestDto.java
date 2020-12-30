@@ -1,19 +1,23 @@
 package com.example.mybatis.dto;
 
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @NoArgsConstructor
+@Setter
+@Getter
 public class UserSaveRequestDto {
     
-    private Long id;
-    private String name;
-    private String phoneNumber;
+    private Long userId;
+    private String userName;
+    private String userPhoneNumber;
     
     @Builder
-    public UserSaveRequestDto(String name, String phoneNumber) {
-        this.name = name;
-        this.phoneNumber = phoneNumber;
+    public UserSaveRequestDto(String userName, String userPhoneNumber) {
+        this.userName = userName;
+        this.userPhoneNumber = userPhoneNumber;
     }
 
 }
