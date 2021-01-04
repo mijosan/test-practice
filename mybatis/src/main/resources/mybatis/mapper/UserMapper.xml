@@ -11,10 +11,7 @@
     <insert id="insertUser" parameterType="UserSaveRequestDto">
         INSERT INTO user (user_name, user_phone_number)
              VALUES (#{userName}, #{userPhoneNumber})
-
-        <selectKey resultType="Long" keyProperty="userId" order="AFTER">
-            SELECT LAST_INSERT_ID()
-        </selectKey>
+             RETURNING user_id
     </insert>
 
 </mapper>

@@ -1,69 +1,69 @@
 package com.example.mybatis.user;
 
 import static org.assertj.core.api.Assertions.assertThat;
-
-import java.util.List;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 
 import com.example.mybatis.dto.UserResponseDto;
 import com.example.mybatis.dto.UserSaveRequestDto;
 import com.example.mybatis.mapper.UserMapper;
-import com.example.mybatis.service.UserService;
+import com.example.mybatis.service.UserServiceImpl;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.transaction.annotation.Transactional;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@ExtendWith(SpringExtension.class)
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
     
-    @Autowired
-    private UserMapper userMapper;
+    @Mock
+    UserMapper userMapper;
 
-    @Autowired
-    private UserService userService;
+    @InjectMocks // Mock 객체가 생성 되는가 ?
+    UserServiceImpl userService;
 
-    @DisplayName("insertUser 테스트")
-    @Test
-    public void insertUser() {
-        // given
-        UserSaveRequestDto userSaveRequestDto = UserSaveRequestDto.builder()
+    UserSaveRequestDto userSaveRequestDto;
+
+    UserResponseDto userResponseDto;
+
+    @BeforeEach
+    void setUp() {
+        userSaveRequestDto = UserSaveRequestDto.builder()
             .userName("test")
             .userPhoneNumber("01026137832")
             .build();
         
-        // when
-        Long userId = userService.insertUser(userSaveRequestDto);
-
-        // then
-        assertThat(userId).isEqualTo(1L);
-
-    }
-
-    @DisplayName("userMapper를 이용한 유저 저장 테스트")
-    @Transactional
-    @Test
-    public void mapper_insertUser() {
-        // given
-        UserSaveRequestDto userSaveRequestDto = UserSaveRequestDto.builder()
+        userResponseDto = UserResponseDto.builder()
+            .userId(1L)
             .userName("test")
             .userPhoneNumber("01026137832")
             .build();
-
-        userMapper.insertUser(userSaveRequestDto);
-
-        // when
-        List<UserResponseDto> userResponseDtoList = userMapper.selectUserList();
-
-        // then
-        UserResponseDto userResponseDto = userResponseDtoList.get(0);
-        assertThat(userResponseDto.getUserName()).isEqualTo("test");
-        assertThat(userResponseDto.getUserPhoneNumber()).isEqualTo("01026137832");
     }
 
+    // Mockito 이용한 테스트 코드
+    @DisplayName("Mock을 사용한 insertUser 테스트")
+    @Test
+    public void insertUser() {
+        // given
+        given(userMapper.insertUser(userSaveRequestDto)).willReturn(1L);
+        given(userMapper.selectUser(any())).willReturn(userResponseDto);
+
+        // when
+        Long userId = userService.insertUser(userSaveRequestDto);
+        UserResponseDto userResponseDto2 = userService.selectUser(userId);
+
+        // then
+        then(userMapper).should().insertUser(userSaveRequestDto);
+        then(userMapper).should().selectUser(any());
+
+        assertThat(userId).isEqualTo(userResponseDto2.getUserId());
+        assertThat(userSaveRequestDto.getUserName()).isEqualTo(userResponseDto2.getUserName());
+        assertThat(userSaveRequestDto.getUserPhoneNumber()).isEqualTo(userResponseDto2.getUserPhoneNumber());
+    }
 
 }

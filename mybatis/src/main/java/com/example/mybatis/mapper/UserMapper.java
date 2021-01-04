@@ -11,6 +11,7 @@ import org.apache.ibatis.annotations.Mapper;
 public interface UserMapper {
     
     public List<UserResponseDto> selectUserList();
-    public void insertUser(UserSaveRequestDto userSaveRequestDto);
+    public Long insertUser(UserSaveRequestDto userSaveRequestDto);
+    public UserResponseDto selectUser(Long userId);
     
 }
