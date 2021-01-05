@@ -1,7 +1,6 @@
 package com.example.mybatis.user;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 
@@ -14,6 +13,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -24,7 +24,7 @@ public class UserServiceTest {
     @Mock
     UserMapper userMapper;
 
-    @InjectMocks // Mock 객체가 생성 되는가 ?
+    @InjectMocks
     UserServiceImpl userService;
 
     UserSaveRequestDto userSaveRequestDto;
@@ -51,19 +51,16 @@ public class UserServiceTest {
     public void insertUser() {
         // given
         given(userMapper.insertUser(userSaveRequestDto)).willReturn(1L);
-        given(userMapper.selectUser(any())).willReturn(userResponseDto);
 
         // when
         Long userId = userService.insertUser(userSaveRequestDto);
-        UserResponseDto userResponseDto2 = userService.selectUser(userId);
 
         // then
-        then(userMapper).should().insertUser(userSaveRequestDto);
-        then(userMapper).should().selectUser(any());
+        ArgumentCaptor<UserSaveRequestDto> captor = ArgumentCaptor.forClass(UserSaveRequestDto.class);
 
-        assertThat(userId).isEqualTo(userResponseDto2.getUserId());
-        assertThat(userSaveRequestDto.getUserName()).isEqualTo(userResponseDto2.getUserName());
-        assertThat(userSaveRequestDto.getUserPhoneNumber()).isEqualTo(userResponseDto2.getUserPhoneNumber());
+        then(userMapper).should().insertUser(captor.capture());
+        assertThat(captor.getValue()).isEqualTo(userSaveRequestDto);
+        assertThat(userId).isEqualTo(1L);
     }
 
 }
