@@ -58,9 +58,9 @@ public class UserServiceTest {
         // then
         ArgumentCaptor<UserSaveRequestDto> captor = ArgumentCaptor.forClass(UserSaveRequestDto.class);
 
-        then(userMapper).should().insertUser(captor.capture());
-        assertThat(captor.getValue()).isEqualTo(userSaveRequestDto);
-        assertThat(userId).isEqualTo(1L);
+        then(userMapper).should().insertUser(captor.capture()); // 검증 1.userMapper가 insertUser를 호출했는지 검증
+        assertThat(captor.getValue()).isEqualTo(userSaveRequestDto);  // 검증 2.매개변수가 inserUser의 매개변수로 잘들어 가였는지 검증
+        assertThat(userId).isEqualTo(1L); // 검증 3.userMapper에서 반환한 값과 userService 객체에서 반환한 값과 같은지 검증
     }
 
 }
