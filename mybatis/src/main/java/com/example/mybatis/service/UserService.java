@@ -5,7 +5,7 @@ import com.example.mybatis.dto.UserSaveRequestDto;
 
 public interface UserService {
     
-    public Long insertUser(UserSaveRequestDto userSaveRequestDto);
-    public UserResponseDto selectUser(Long userId);
+    public Long postUser(UserSaveRequestDto userSaveRequestDto);
+    public UserResponseDto getUser(Long userId);
 
 }

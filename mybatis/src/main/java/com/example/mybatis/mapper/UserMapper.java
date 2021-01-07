@@ -13,5 +13,6 @@ public interface UserMapper {
     public List<UserResponseDto> selectUserList();
     public Long insertUser(UserSaveRequestDto userSaveRequestDto);
     public UserResponseDto selectUser(Long userId);
+    public Long selectMaxUserId();
     
 }

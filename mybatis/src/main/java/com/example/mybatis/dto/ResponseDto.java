@@ -1,10 +1,10 @@
 package com.example.mybatis.dto;
 
-import org.springframework.http.HttpStatus;
-
 import lombok.Builder;
+import lombok.Getter;
 
 @Builder
+@Getter
 public class ResponseDto {
     
     private Object data;

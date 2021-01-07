@@ -15,19 +15,21 @@ public class UserServiceImpl implements UserService {
     
     private final UserMapper userMapper;
 
-    @Transactional
     @Override
-    public Long insertUser(UserSaveRequestDto userSaveRequestDto) {
-        Long user_id = userMapper.insertUser(userSaveRequestDto);
-
-        return user_id;
-    }
-
-    @Override
-    public UserResponseDto selectUser(Long userId) {
+    public UserResponseDto getUser(Long userId) {
         UserResponseDto userResponseDto = userMapper.selectUser(userId);
 
         return userResponseDto;
+    }
+
+    @Transactional
+    @Override
+    public Long postUser(UserSaveRequestDto userSaveRequestDto) {
+        userMapper.insertUser(userSaveRequestDto);
+
+        Long userId = userMapper.selectMaxUserId();
+
+        return userId;
     }
 
 }

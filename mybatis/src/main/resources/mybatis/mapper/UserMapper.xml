@@ -8,10 +8,20 @@
           FROM user
     </select>
 
+    <select id="selectUser" parameterType="Long" resultType="UserResponseDto">
+        SELECT *
+          FROM user
+         WHERE user_id = #{userId}
+    </select>
+
+    <select id="selectMaxUserId" resultType="Long">
+        SELECT max(user_id)
+          FROM user
+    </select>
+
     <insert id="insertUser" parameterType="UserSaveRequestDto">
         INSERT INTO user (user_name, user_phone_number)
              VALUES (#{userName}, #{userPhoneNumber})
-             RETURNING user_id
     </insert>
 
 </mapper>
